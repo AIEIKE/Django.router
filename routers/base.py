@@ -1,6 +1,6 @@
 from functools import partial
 from .conf import path, re_path
-from django.urls.resolvers import RegexPattern, RoutePattern
+from django.views import View
 
 
 class Router:
@@ -10,6 +10,8 @@ class Router:
     def path(self, route, kwargs=None, name=None):
 
         def decorator(view):
+            if isinstance(view, View):
+                view = view.as_view()
             pattern = path(route, view, kwargs, name)
             self.urlpatterns.append(pattern)
             return view
@@ -19,6 +21,8 @@ class Router:
     def re_path(self, route, kwargs=None, name=None):
 
         def decorator(view):
+            if isinstance(view, View):
+                view = view.as_view()
             pattern = re_path(route, view, kwargs, name)
             self.urlpatterns.append(pattern)
             return view
