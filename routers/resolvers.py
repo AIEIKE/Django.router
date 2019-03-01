@@ -1,19 +1,19 @@
 from django.urls import URLResolver as _URLResolver
 from django.utils.functional import cached_property
 from django.core.exceptions import ImproperlyConfigured
+from .base import Router
 
 
 class URLResolver(_URLResolver):
 
     @cached_property
     def url_patterns(self):
-        # urlconf_module might be a valid set of patterns, so we default to it
         router = getattr(self.urlconf_module, "router", None)
-        if router is None:
+        if isinstance(router, Router):
+            patterns = router.urlpatterns
+        else:
             patterns = getattr(self.urlconf_module,
                                "urlpatterns", self.urlconf_module)
-        else:
-            patterns = router.urlpatterns
         try:
             iter(patterns)
         except TypeError:
