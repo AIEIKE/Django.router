@@ -13,11 +13,17 @@ urlpatterns = [
 ```
 from django.routers import Router
 from django.http import HttpResponse
+from django.views import View
 
 router = Router()
 
-@router.path('login/', name='index')
+@router.path('', name='index')
 def index(request):
     return HttpResponse('index')
-    
+
+
+@router.path('login/', name='login')
+class LoginView(View):
+    def get(self, request):
+        return HttpResponse('login')
 ```
