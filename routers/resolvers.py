@@ -1,7 +1,6 @@
 from django.urls import URLResolver as _URLResolver
 from django.utils.functional import cached_property
 from django.core.exceptions import ImproperlyConfigured
-from .base import Router
 
 
 class URLResolver(_URLResolver):
@@ -9,7 +8,7 @@ class URLResolver(_URLResolver):
     @cached_property
     def url_patterns(self):
         router = getattr(self.urlconf_module, "router", None)
-        if isinstance(router, Router):
+        if hasattr(router, 'urlpatterns'):
             patterns = router.urlpatterns
         else:
             patterns = getattr(self.urlconf_module,
