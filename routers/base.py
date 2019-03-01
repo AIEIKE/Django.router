@@ -9,7 +9,7 @@ class Router:
     def path(self, route, kwargs=None, name=None):
 
         def decorator(view):
-            if isinstance(view, View):
+            if issubclass(view, View):
                 view = view.as_view()
             pattern = path(route, view, kwargs, name)
             self.urlpatterns.append(pattern)
@@ -20,7 +20,7 @@ class Router:
     def re_path(self, route, kwargs=None, name=None):
 
         def decorator(view):
-            if isinstance(view, View):
+            if issubclass(view, View):
                 view = view.as_view()
             pattern = re_path(route, view, kwargs, name)
             self.urlpatterns.append(pattern)
