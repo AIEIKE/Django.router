@@ -1,29 +1,21 @@
-from .conf import path, re_path
-from django.views import View
+from .conf import _path, RegexPattern, RoutePattern
 
 
-class Router:
+class Router(object):
 
     urlpatterns = []
 
-    def path(self, route, kwargs=None, name=None):
-
+    def _path(self, route, kwargs=None, name=None, Pattern=None):
         def decorator(view):
-            if issubclass(view, View):
+            if hasattr(view, 'as_view'):
                 view = view.as_view()
-            pattern = path(route, view, kwargs, name)
+            pattern = _path(route, view, kwargs, name, Pattern)
             self.urlpatterns.append(pattern)
             return view
-
         return decorator
+
+    def path(self, route, kwargs=None, name=None):
+        return self._path(route, kwargs, name, RoutePattern)
 
     def re_path(self, route, kwargs=None, name=None):
-
-        def decorator(view):
-            if issubclass(view, View):
-                view = view.as_view()
-            pattern = re_path(route, view, kwargs, name)
-            self.urlpatterns.append(pattern)
-            return view
-
-        return decorator
+        return self._path(route, kwargs, name, RegexPattern)
