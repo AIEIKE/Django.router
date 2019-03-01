@@ -1,4 +1,3 @@
-from functools import partial
 from .conf import path, re_path
 from django.views import View
 
