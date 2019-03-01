@@ -1,4 +1,3 @@
-"""Functions for use in URLsconfs."""
 from functools import partial
 from importlib import import_module
 from django.core.exceptions import ImproperlyConfigured
@@ -11,7 +10,6 @@ from .resolvers import URLResolver
 def include(arg, namespace=None):
     app_name = None
     if isinstance(arg, tuple):
-        # Callable returning a namespace hint.
         try:
             urlconf_module, app_name = arg
         except ValueError:
@@ -26,7 +24,6 @@ def include(arg, namespace=None):
                 'provide the namespace argument to include() instead.' % len(arg)
             )
     else:
-        # No namespace hint - use manually provided namespace.
         urlconf_module = arg
 
     if isinstance(urlconf_module, str):
@@ -47,8 +44,7 @@ def include(arg, namespace=None):
                 'app_name instead.',
             )
         namespace = namespace or app_name
-        # Make sure the patterns can be iterated through (without this, some
-        # testcases will break).
+
         if isinstance(patterns, (list, tuple)):
             for url_pattern in patterns:
                 pattern = getattr(url_pattern, 'pattern', None)
@@ -61,7 +57,6 @@ def include(arg, namespace=None):
 
 def _path(route, view, kwargs=None, name=None, Pattern=None):
     if isinstance(view, (list, tuple)):
-        # For include(...) processing.
         pattern = Pattern(route, is_endpoint=False)
         urlconf_module, app_name, namespace = view
         return URLResolver(
