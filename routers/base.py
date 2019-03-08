@@ -8,8 +8,9 @@ class Router(object):
     def _path(self, route, kwargs=None, name=None, Pattern=None):
         def decorator(view):
             if hasattr(view, 'as_view'):
-                view = view.as_view()
-            pattern = _path(route, view, kwargs, name, Pattern)
+                pattern = _path(route, view.as_view(), kwargs, name, Pattern)
+            else:
+                pattern = _path(route, view, kwargs, name, Pattern)
             self.urlpatterns.append(pattern)
             return view
         return decorator
@@ -19,3 +20,5 @@ class Router(object):
 
     def re_path(self, route, kwargs=None, name=None):
         return self._path(route, kwargs, name, RegexPattern)
+
+    
