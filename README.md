@@ -1,6 +1,7 @@
 # Django.router
 提供装饰器分发路由功能
 
+将router文件夹放到Django目录下
 在工程urls文件下引入
 ```
 from django.routers import path, include
